@@ -38,9 +38,10 @@ public abstract class InterfaceAccessor<I, R> implements Function<Object, R> {
 		validateMethods(object, interfaceMethod, method);
 
 		try {
+			method.setAccessible(true);
 			return (R) method.invoke(object, new Object[0]);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			throw new RuntimeException(interfaceMethod.getName() + " method call had an issue on the class ["+object.getClass().getName()+"]");
+			throw new RuntimeException(interfaceMethod.getName() + " method call had an issue on the class ["+object.getClass().getName()+"]", e);
 		}
 	}
 

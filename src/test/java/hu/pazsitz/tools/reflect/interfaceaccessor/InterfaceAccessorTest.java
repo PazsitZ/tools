@@ -2,9 +2,9 @@ package hu.pazsitz.tools.reflect.interfaceaccessor;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
-import org.junit.Assert;
+import java.util.stream.Collectors;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class InterfaceAccessorTest {
@@ -18,27 +18,92 @@ public class InterfaceAccessorTest {
 		UserDto2 userData2_2 = new UserDto2(THE__MEDIOR, "Engineer", "Medior");
 		UserDto userData3 = new UserDto(THE__SENIOR, 48, "Senior");
 
-
-        Assert.assertEquals(THE__JUNIOR, Stream.of(userData).map(UserDtoNameAware.ACCESSOR).findFirst().get());
-        Assert.assertEquals(THE__MEDIOR, Stream.of(userData2_2).map(UserDtoNameAware.ACCESSOR).findFirst().get());
-        Assert.assertEquals(THE__SENIOR, Stream.of(userData3).map(UserDtoNameAware.ACCESSOR).findFirst().get());
-		List<Object> list = Arrays.asList(userData, userData2_2, userData3);
+        Assert.assertEquals(THE__JUNIOR, UserDtoNameAware.ACCESSOR.apply(userData));
+        Assert.assertEquals(THE__MEDIOR, UserDtoNameAware.ACCESSOR.apply(userData2_2));
+        Assert.assertEquals(THE__SENIOR, UserDtoNameAware.ACCESSOR.apply(userData3));
 	}
 
+    @Test(expected = IllegalArgumentException.class)
+	public void testInterfaceAccessorDifferentReturntype() {
+		UserDto3 userData2_3 = new UserDto3(THE__MEDIOR, "Engineer", "Medior");
+
+		Assert.assertEquals(THE__MEDIOR, UserDtoNameAware.ACCESSOR.apply(userData2_3));
+	}
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testInterfaceAccessorNoSuchMethod() {
+    	String anyClass = new String();
+    	
+    	Assert.assertEquals("", UserDtoNameAware.ACCESSOR.apply(anyClass));
+    }
 
     @Test
-        //(expected = IllegalArgumentException.class)
-	public void testInterfaceAccessorNoSuchMethod() {
+	public void testInterfaceAccessorMap() {
 		UserDto userData = new UserDto(THE__JUNIOR, 18, "Junior");
-		UserDto userData2 = new UserDto(THE__MEDIOR, 28, "Medior");
-		UserDto2 userData2_2 = new UserDto2(THE__MEDIOR+"2", "Engineer", "Medior");
-		UserDto3 userData2_3 = new UserDto3(THE__MEDIOR+"2", "Engineer", "Medior");
+		UserDto2 userData2_2 = new UserDto2(THE__MEDIOR, "Engineer", "Medior");
 		UserDto userData3 = new UserDto(THE__SENIOR, 48, "Senior");
-		List<Object> list = Arrays.asList(userData, userData2, userData2_2, userData2_3, userData3);
 
-		list.stream()
-			.map(UserDtoNameAware.ACCESSOR)
-			.forEach(System.out::println);
+        List<Object> list = Arrays.asList(userData, userData2_2, userData3);
+        
+        List<String> names = list.stream()
+        	.map(UserDtoNameAware.ACCESSOR)
+        	.collect(Collectors.toList());
+        
+        Assert.assertTrue(names.contains(THE__JUNIOR));
+        Assert.assertTrue(names.contains(THE__MEDIOR));
+        Assert.assertTrue(names.contains(THE__SENIOR));
+	}
+}
+
+class UserDto implements UserDtoNameAware {
+	private final String name;
+	private final int age;
+	private final String title;
+
+	public UserDto(String name, int age, String title) {
+		this.name = name;
+		this.age = age;
+		this.title = title;
 	}
 
+	public String getName() {
+		return name;
+	}
+	public int getAge() {
+		return age;
+	}
+	public String getTitle() {
+		return title;
+	}
+}
+
+class UserDto2 {
+	private final String name;
+	private final String job;
+	private final String workTitle;
+	
+	public UserDto2(String name, String job, String workTitle) {
+		this.name = name;
+		this.job = job;
+		this.workTitle = workTitle;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public String getJob() {
+		return job;
+	}
+	public String getWorkTitle() {
+		return workTitle;
+	}
+}
+
+class UserDto3 {
+    public UserDto3(String the_Medior2, String engineer, String medior) {
+    }
+
+    public int getName() {
+        return 0;
+    }
 }
