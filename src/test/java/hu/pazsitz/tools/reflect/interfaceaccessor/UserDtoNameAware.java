@@ -1,6 +1,6 @@
-package hu.pazsitz.tools.interfaceaccessor;
+package hu.pazsitz.tools.reflect.interfaceaccessor;
 
-import hu.pazsitz.tools.InterfaceAccessor;
+import hu.pazsitz.tools.reflect.InterfaceAccessor;
 
 public interface UserDtoNameAware {
 

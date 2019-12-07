@@ -1,4 +1,4 @@
-package hu.pazsitz.tools.java.utils;
+package hu.pazsitz.tools.java.util;
 
 import java.util.function.Function;
 import java.util.Objects;

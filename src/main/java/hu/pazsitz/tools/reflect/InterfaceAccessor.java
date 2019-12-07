@@ -1,4 +1,4 @@
-package hu.pazsitz.tools;
+package hu.pazsitz.tools.reflect;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -47,7 +47,11 @@ public abstract class InterfaceAccessor<I, R> implements Function<Object, R> {
 	private void validateMethods(Object object, Method interfaceMethod, Method method) {
 		if (method == null) {
 			throw new IllegalArgumentException(interfaceMethod.getName() + " method is expected, but missing from the class ["+object.getClass().getName()+"]");
-		}
+		} else {
+            if (!interfaceMethod.getReturnType().isAssignableFrom(method.getReturnType())) {
+                throw new IllegalArgumentException("Return types are not matching: ["+method.getReturnType()+"]<->["+interfaceMethod.getReturnType()+"]");
+            }
+        }
 	}
 
 	private Method findMethod(Class<?> clazz, String name) {

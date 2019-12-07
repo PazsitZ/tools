@@ -1,4 +1,4 @@
-package hu.pazsitz.tools.interfaceaccessor;
+package hu.pazsitz.tools.reflect.interfaceaccessor;
 
 public class UserDto2 {
 	private final String name;

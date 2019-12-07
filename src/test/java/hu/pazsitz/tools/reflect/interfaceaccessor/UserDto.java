@@ -1,4 +1,4 @@
-package hu.pazsitz.tools.interfaceaccessor;
+package hu.pazsitz.tools.reflect.interfaceaccessor;
 
 public final class UserDto implements UserDtoNameAware {
 	private final String name;
