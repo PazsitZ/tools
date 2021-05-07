@@ -12,7 +12,7 @@ import java.util.function.Predicate;
  * A List proxy to enrich the list
  * Filters the List before adding <tt>e</tt>lement to collection by decorating the addition methods
  * Any other method is simply proxying the functions to the internal list
- * It skips (silentlz fails on) adding invalid elements (by the default predicate)
+ * It skips (silently fails on) adding invalid elements (by the default predicate)
  * @author PazsitZ
  *
  * @param <E>
